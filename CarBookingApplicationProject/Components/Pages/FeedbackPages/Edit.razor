@@ -1,0 +1,129 @@
+﻿@page "/feedbacks/edit"
+@using Microsoft.EntityFrameworkCore
+@using CarBookingApplicationProject.Domain
+@inject IDbContextFactory<CarBookingApplicationProject.Data.CarBookingApplicationProjectContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Edit</PageTitle>
+
+<h1>Edit</h1>
+
+<h2>Feedback</h2>
+<hr />
+@if (Feedback is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-4">
+            <EditForm method="post" Model="Feedback" OnValidSubmit="UpdateFeedback" FormName="edit" Enhance>
+                <DataAnnotationsValidator />
+                <ValidationSummary role="alert"/>
+                <input type="hidden" name="Feedback.Id" value="@Feedback.Id" />
+                <div class="mb-3">
+                    <label for="rating" class="form-label">Rating:</label>
+                    <InputNumber id="rating" @bind-Value="Feedback.Rating" class="form-control" />
+                    <ValidationMessage For="() => Feedback.Rating" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="comments" class="form-label">Comments:</label>
+                    <InputText id="comments" @bind-Value="Feedback.Comments" class="form-control" />
+                    <ValidationMessage For="() => Feedback.Comments" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="feedbackdatetime" class="form-label">FeedbackDateTime:</label>
+                    <InputDate id="feedbackdatetime" @bind-Value="Feedback.FeedbackDateTime" class="form-control" />
+                    <ValidationMessage For="() => Feedback.FeedbackDateTime" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="rideid" class="form-label">RideId:</label>
+                    <InputNumber id="rideid" @bind-Value="Feedback.RideId" class="form-control" />
+                    <ValidationMessage For="() => Feedback.RideId" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="userid" class="form-label">UserId:</label>
+                    <InputNumber id="userid" @bind-Value="Feedback.UserId" class="form-control" />
+                    <ValidationMessage For="() => Feedback.UserId" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="datecreated" class="form-label">DateCreated:</label>
+                    <InputDate id="datecreated" @bind-Value="Feedback.DateCreated" class="form-control" />
+                    <ValidationMessage For="() => Feedback.DateCreated" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="dateupdated" class="form-label">DateUpdated:</label>
+                    <InputDate id="dateupdated" @bind-Value="Feedback.DateUpdated" class="form-control" />
+                    <ValidationMessage For="() => Feedback.DateUpdated" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="createdby" class="form-label">CreatedBy:</label>
+                    <InputText id="createdby" @bind-Value="Feedback.CreatedBy" class="form-control" />
+                    <ValidationMessage For="() => Feedback.CreatedBy" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="updatedby" class="form-label">UpdatedBy:</label>
+                    <InputText id="updatedby" @bind-Value="Feedback.UpdatedBy" class="form-control" />
+                    <ValidationMessage For="() => Feedback.UpdatedBy" class="text-danger" />
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+<div>
+    <a href="/feedbacks">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromQuery]
+    private int Id { get; set; }
+
+    [SupplyParameterFromForm]
+    private Feedback? Feedback { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        Feedback ??= await context.Feedback.FirstOrDefaultAsync(m => m.Id == Id);
+
+        if (Feedback is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+
+    // To protect from overposting attacks, enable the specific properties you want to bind to.
+    // For more information, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task UpdateFeedback()
+    {
+        using var context = DbFactory.CreateDbContext();
+        context.Attach(Feedback!).State = EntityState.Modified;
+
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!FeedbackExists(Feedback!.Id))
+            {
+                NavigationManager.NavigateTo("notfound");
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        NavigationManager.NavigateTo("/feedbacks");
+    }
+
+    private bool FeedbackExists(int id)
+    {
+        using var context = DbFactory.CreateDbContext();
+        return context.Feedback.Any(e => e.Id == id);
+    }
+}

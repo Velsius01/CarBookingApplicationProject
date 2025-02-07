@@ -1,0 +1,94 @@
+﻿@page "/rides/create"
+@using Microsoft.EntityFrameworkCore
+@using CarBookingApplicationProject.Domain
+@inject IDbContextFactory<CarBookingApplicationProject.Data.CarBookingApplicationProjectContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Create</PageTitle>
+
+<h1>Create</h1>
+
+<h2>Ride</h2>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <EditForm method="post" Model="Ride" OnValidSubmit="AddRide" FormName="create" Enhance>
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" role="alert"/>
+            <div class="mb-3">
+                <label for="pickuptime" class="form-label">PickupTime:</label> 
+                <InputDate id="pickuptime" @bind-Value="Ride.PickupTime" class="form-control" /> 
+                <ValidationMessage For="() => Ride.PickupTime" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="dropofftime" class="form-label">DropoffTime:</label> 
+                <InputDate id="dropofftime" @bind-Value="Ride.DropoffTime" class="form-control" /> 
+                <ValidationMessage For="() => Ride.DropoffTime" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="ridestatus" class="form-label">RideStatus:</label> 
+                <InputText id="ridestatus" @bind-Value="Ride.RideStatus" class="form-control" /> 
+                <ValidationMessage For="() => Ride.RideStatus" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="ridecost" class="form-label">RideCost:</label> 
+                <InputNumber id="ridecost" @bind-Value="Ride.RideCost" class="form-control" /> 
+                <ValidationMessage For="() => Ride.RideCost" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="userid" class="form-label">UserId:</label> 
+                <InputNumber id="userid" @bind-Value="Ride.UserId" class="form-control" /> 
+                <ValidationMessage For="() => Ride.UserId" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="locationid" class="form-label">LocationId:</label> 
+                <InputNumber id="locationid" @bind-Value="Ride.LocationId" class="form-control" /> 
+                <ValidationMessage For="() => Ride.LocationId" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="promotionid" class="form-label">PromotionId:</label> 
+                <InputNumber id="promotionid" @bind-Value="Ride.PromotionId" class="form-control" /> 
+                <ValidationMessage For="() => Ride.PromotionId" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="datecreated" class="form-label">DateCreated:</label> 
+                <InputDate id="datecreated" @bind-Value="Ride.DateCreated" class="form-control" /> 
+                <ValidationMessage For="() => Ride.DateCreated" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="dateupdated" class="form-label">DateUpdated:</label> 
+                <InputDate id="dateupdated" @bind-Value="Ride.DateUpdated" class="form-control" /> 
+                <ValidationMessage For="() => Ride.DateUpdated" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="createdby" class="form-label">CreatedBy:</label> 
+                <InputText id="createdby" @bind-Value="Ride.CreatedBy" class="form-control" /> 
+                <ValidationMessage For="() => Ride.CreatedBy" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="updatedby" class="form-label">UpdatedBy:</label> 
+                <InputText id="updatedby" @bind-Value="Ride.UpdatedBy" class="form-control" /> 
+                <ValidationMessage For="() => Ride.UpdatedBy" class="text-danger" /> 
+            </div>        
+            <button type="submit" class="btn btn-primary">Create</button>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="/rides">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    private Ride Ride { get; set; } = new();
+
+    // To protect from overposting attacks, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task AddRide()
+    {
+        using var context = DbFactory.CreateDbContext();
+        context.Ride.Add(Ride);
+        await context.SaveChangesAsync();
+        NavigationManager.NavigateTo("/rides");
+    }
+}

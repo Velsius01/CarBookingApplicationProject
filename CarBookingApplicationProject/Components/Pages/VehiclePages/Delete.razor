@@ -1,0 +1,95 @@
+﻿@page "/vehicles/delete"
+@using Microsoft.EntityFrameworkCore
+@using CarBookingApplicationProject.Domain
+@inject IDbContextFactory<CarBookingApplicationProject.Data.CarBookingApplicationProjectContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Delete</PageTitle>
+
+<h1>Delete</h1>
+
+<p>Are you sure you want to delete this?</p>
+<div>
+    <h2>Vehicle</h2>
+    <hr />
+    @if (vehicle is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <dl class="row">
+            <dt class="col-sm-2">LicensePlate</dt>
+            <dd class="col-sm-10">@vehicle.LicensePlate</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Model</dt>
+            <dd class="col-sm-10">@vehicle.Model</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Manufacturer</dt>
+            <dd class="col-sm-10">@vehicle.Manufacturer</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Year</dt>
+            <dd class="col-sm-10">@vehicle.Year</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Status</dt>
+            <dd class="col-sm-10">@vehicle.Status</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">MaximumPassengers</dt>
+            <dd class="col-sm-10">@vehicle.MaximumPassengers</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">UserId</dt>
+            <dd class="col-sm-10">@vehicle.UserId</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">DateCreated</dt>
+            <dd class="col-sm-10">@vehicle.DateCreated</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">DateUpdated</dt>
+            <dd class="col-sm-10">@vehicle.DateUpdated</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">CreatedBy</dt>
+            <dd class="col-sm-10">@vehicle.CreatedBy</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">UpdatedBy</dt>
+            <dd class="col-sm-10">@vehicle.UpdatedBy</dd>
+        </dl>
+        <EditForm method="post" Model="vehicle" OnValidSubmit="DeleteVehicle" FormName="delete" Enhance>
+            <button type="submit" class="btn btn-danger" disabled="@(vehicle is null)">Delete</button> |
+            <a href="/vehicles">Back to List</a>
+        </EditForm>
+    }
+</div>
+
+@code {
+    private Vehicle? vehicle;
+
+    [SupplyParameterFromQuery]
+    private int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        vehicle = await context.Vehicle.FirstOrDefaultAsync(m => m.Id == Id);
+
+        if (vehicle is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+
+    private async Task DeleteVehicle()
+    {
+        using var context = DbFactory.CreateDbContext();
+        context.Vehicle.Remove(vehicle!);
+        await context.SaveChangesAsync();
+        NavigationManager.NavigateTo("/vehicles");
+    }
+}

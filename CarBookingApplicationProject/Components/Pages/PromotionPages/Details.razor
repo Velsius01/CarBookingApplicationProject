@@ -1,0 +1,60 @@
+﻿@page "/promotions/details"
+@using Microsoft.EntityFrameworkCore
+@using CarBookingApplicationProject.Domain
+@inject IDbContextFactory<CarBookingApplicationProject.Data.CarBookingApplicationProjectContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Details</PageTitle>
+
+<h1>Details</h1>
+
+<div>
+    <h2>Promotion</h2>
+    <hr />
+    @if (promotion is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <dl class="row">
+            <dt class="col-sm-2">PromotionCode</dt>
+            <dd class="col-sm-10">@promotion.PromotionCode</dd>
+            <dt class="col-sm-2">DiscountAmount</dt>
+            <dd class="col-sm-10">@promotion.DiscountAmount</dd>
+            <dt class="col-sm-2">StartDate</dt>
+            <dd class="col-sm-10">@promotion.StartDate</dd>
+            <dt class="col-sm-2">EndDate</dt>
+            <dd class="col-sm-10">@promotion.EndDate</dd>
+            <dt class="col-sm-2">DateCreated</dt>
+            <dd class="col-sm-10">@promotion.DateCreated</dd>
+            <dt class="col-sm-2">DateUpdated</dt>
+            <dd class="col-sm-10">@promotion.DateUpdated</dd>
+            <dt class="col-sm-2">CreatedBy</dt>
+            <dd class="col-sm-10">@promotion.CreatedBy</dd>
+            <dt class="col-sm-2">UpdatedBy</dt>
+            <dd class="col-sm-10">@promotion.UpdatedBy</dd>
+        </dl>
+        <div>
+            <a href="@($"/promotions/edit?id={promotion.Id}")">Edit</a> |
+            <a href="@($"/promotions")">Back to List</a>
+        </div>
+    }
+</div>
+
+@code {
+    private Promotion? promotion;
+
+    [SupplyParameterFromQuery]
+    private int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        promotion = await context.Promotion.FirstOrDefaultAsync(m => m.Id == Id);
+
+        if (promotion is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+}

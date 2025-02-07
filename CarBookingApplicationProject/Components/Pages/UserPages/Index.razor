@@ -1,0 +1,51 @@
+﻿@page "/users"
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using CarBookingApplicationProject.Domain
+@using CarBookingApplicationProject.Data
+@implements IAsyncDisposable
+@inject IDbContextFactory<CarBookingApplicationProject.Data.CarBookingApplicationProjectContext> DbFactory
+
+<PageTitle>Index</PageTitle>
+
+<h1>Index</h1>
+
+<p>
+    <a href="users/create">Create New</a>
+</p>
+
+<QuickGrid Class="table" Items="context.User">
+    <PropertyColumn Property="user => user.Name" />
+    <PropertyColumn Property="user => user.Email" />
+    <PropertyColumn Property="user => user.PhoneNumber" />
+    <PropertyColumn Property="user => user.DateOfBirth" />
+    <PropertyColumn Property="user => user.Gender" />
+    <PropertyColumn Property="user => user.Address" />
+    <PropertyColumn Property="user => user.CarLicense" />
+    <PropertyColumn Property="user => user.AcceptanceRate" />
+    <PropertyColumn Property="user => user.DrivingExperience" />
+    <PropertyColumn Property="user => user.FrequentLocations" />
+    <PropertyColumn Property="user => user.PreferredPickupTime" />
+    <PropertyColumn Property="user => user.RoleId" />
+    <PropertyColumn Property="user => user.DateCreated" />
+    <PropertyColumn Property="user => user.DateUpdated" />
+    <PropertyColumn Property="user => user.CreatedBy" />
+    <PropertyColumn Property="user => user.UpdatedBy" />
+
+    <TemplateColumn Context="user">
+        <a href="@($"users/edit?id={user.Id}")">Edit</a> |
+        <a href="@($"users/details?id={user.Id}")">Details</a> |
+        <a href="@($"users/delete?id={user.Id}")">Delete</a>
+    </TemplateColumn>
+</QuickGrid>
+
+@code {
+    private CarBookingApplicationProjectContext context = default!;
+
+    protected override void OnInitialized()
+    {
+        context = DbFactory.CreateDbContext();
+    }
+
+    public async ValueTask DisposeAsync() => await context.DisposeAsync();
+}

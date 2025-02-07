@@ -1,0 +1,66 @@
+﻿@page "/rides/details"
+@using Microsoft.EntityFrameworkCore
+@using CarBookingApplicationProject.Domain
+@inject IDbContextFactory<CarBookingApplicationProject.Data.CarBookingApplicationProjectContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Details</PageTitle>
+
+<h1>Details</h1>
+
+<div>
+    <h2>Ride</h2>
+    <hr />
+    @if (ride is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <dl class="row">
+            <dt class="col-sm-2">PickupTime</dt>
+            <dd class="col-sm-10">@ride.PickupTime</dd>
+            <dt class="col-sm-2">DropoffTime</dt>
+            <dd class="col-sm-10">@ride.DropoffTime</dd>
+            <dt class="col-sm-2">RideStatus</dt>
+            <dd class="col-sm-10">@ride.RideStatus</dd>
+            <dt class="col-sm-2">RideCost</dt>
+            <dd class="col-sm-10">@ride.RideCost</dd>
+            <dt class="col-sm-2">UserId</dt>
+            <dd class="col-sm-10">@ride.UserId</dd>
+            <dt class="col-sm-2">LocationId</dt>
+            <dd class="col-sm-10">@ride.LocationId</dd>
+            <dt class="col-sm-2">PromotionId</dt>
+            <dd class="col-sm-10">@ride.PromotionId</dd>
+            <dt class="col-sm-2">DateCreated</dt>
+            <dd class="col-sm-10">@ride.DateCreated</dd>
+            <dt class="col-sm-2">DateUpdated</dt>
+            <dd class="col-sm-10">@ride.DateUpdated</dd>
+            <dt class="col-sm-2">CreatedBy</dt>
+            <dd class="col-sm-10">@ride.CreatedBy</dd>
+            <dt class="col-sm-2">UpdatedBy</dt>
+            <dd class="col-sm-10">@ride.UpdatedBy</dd>
+        </dl>
+        <div>
+            <a href="@($"/rides/edit?id={ride.Id}")">Edit</a> |
+            <a href="@($"/rides")">Back to List</a>
+        </div>
+    }
+</div>
+
+@code {
+    private Ride? ride;
+
+    [SupplyParameterFromQuery]
+    private int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        ride = await context.Ride.FirstOrDefaultAsync(m => m.Id == Id);
+
+        if (ride is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+}

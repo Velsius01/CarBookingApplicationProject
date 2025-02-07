@@ -1,0 +1,79 @@
+﻿@page "/promotions/create"
+@using Microsoft.EntityFrameworkCore
+@using CarBookingApplicationProject.Domain
+@inject IDbContextFactory<CarBookingApplicationProject.Data.CarBookingApplicationProjectContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Create</PageTitle>
+
+<h1>Create</h1>
+
+<h2>Promotion</h2>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <EditForm method="post" Model="Promotion" OnValidSubmit="AddPromotion" FormName="create" Enhance>
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" role="alert"/>
+            <div class="mb-3">
+                <label for="promotioncode" class="form-label">PromotionCode:</label> 
+                <InputText id="promotioncode" @bind-Value="Promotion.PromotionCode" class="form-control" /> 
+                <ValidationMessage For="() => Promotion.PromotionCode" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="discountamount" class="form-label">DiscountAmount:</label> 
+                <InputNumber id="discountamount" @bind-Value="Promotion.DiscountAmount" class="form-control" /> 
+                <ValidationMessage For="() => Promotion.DiscountAmount" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="startdate" class="form-label">StartDate:</label> 
+                <InputDate id="startdate" @bind-Value="Promotion.StartDate" class="form-control" /> 
+                <ValidationMessage For="() => Promotion.StartDate" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="enddate" class="form-label">EndDate:</label> 
+                <InputDate id="enddate" @bind-Value="Promotion.EndDate" class="form-control" /> 
+                <ValidationMessage For="() => Promotion.EndDate" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="datecreated" class="form-label">DateCreated:</label> 
+                <InputDate id="datecreated" @bind-Value="Promotion.DateCreated" class="form-control" /> 
+                <ValidationMessage For="() => Promotion.DateCreated" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="dateupdated" class="form-label">DateUpdated:</label> 
+                <InputDate id="dateupdated" @bind-Value="Promotion.DateUpdated" class="form-control" /> 
+                <ValidationMessage For="() => Promotion.DateUpdated" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="createdby" class="form-label">CreatedBy:</label> 
+                <InputText id="createdby" @bind-Value="Promotion.CreatedBy" class="form-control" /> 
+                <ValidationMessage For="() => Promotion.CreatedBy" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="updatedby" class="form-label">UpdatedBy:</label> 
+                <InputText id="updatedby" @bind-Value="Promotion.UpdatedBy" class="form-control" /> 
+                <ValidationMessage For="() => Promotion.UpdatedBy" class="text-danger" /> 
+            </div>        
+            <button type="submit" class="btn btn-primary">Create</button>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="/promotions">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    private Promotion Promotion { get; set; } = new();
+
+    // To protect from overposting attacks, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task AddPromotion()
+    {
+        using var context = DbFactory.CreateDbContext();
+        context.Promotion.Add(Promotion);
+        await context.SaveChangesAsync();
+        NavigationManager.NavigateTo("/promotions");
+    }
+}

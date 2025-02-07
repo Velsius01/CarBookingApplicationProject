@@ -1,0 +1,43 @@
+﻿@page "/promotions"
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using CarBookingApplicationProject.Domain
+@using CarBookingApplicationProject.Data
+@implements IAsyncDisposable
+@inject IDbContextFactory<CarBookingApplicationProject.Data.CarBookingApplicationProjectContext> DbFactory
+
+<PageTitle>Index</PageTitle>
+
+<h1>Index</h1>
+
+<p>
+    <a href="promotions/create">Create New</a>
+</p>
+
+<QuickGrid Class="table" Items="context.Promotion">
+    <PropertyColumn Property="promotion => promotion.PromotionCode" />
+    <PropertyColumn Property="promotion => promotion.DiscountAmount" />
+    <PropertyColumn Property="promotion => promotion.StartDate" />
+    <PropertyColumn Property="promotion => promotion.EndDate" />
+    <PropertyColumn Property="promotion => promotion.DateCreated" />
+    <PropertyColumn Property="promotion => promotion.DateUpdated" />
+    <PropertyColumn Property="promotion => promotion.CreatedBy" />
+    <PropertyColumn Property="promotion => promotion.UpdatedBy" />
+
+    <TemplateColumn Context="promotion">
+        <a href="@($"promotions/edit?id={promotion.Id}")">Edit</a> |
+        <a href="@($"promotions/details?id={promotion.Id}")">Details</a> |
+        <a href="@($"promotions/delete?id={promotion.Id}")">Delete</a>
+    </TemplateColumn>
+</QuickGrid>
+
+@code {
+    private CarBookingApplicationProjectContext context = default!;
+
+    protected override void OnInitialized()
+    {
+        context = DbFactory.CreateDbContext();
+    }
+
+    public async ValueTask DisposeAsync() => await context.DisposeAsync();
+}
