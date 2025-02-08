@@ -5,9 +5,12 @@
         public string? LicensePlate { get; set; }
         public string? Model { get; set; }
         public string? Manufacturer { get; set; }
-        public string? Year { get; set; }
+        public int? Year { get; set; }
         public string? Status { get; set; }
-        public string? MaximumPassengers { get; set; }
-        public int UserId { get; set; }
+        public int? MaximumPassengers { get; set; }
+        public int? UserId { get; set; } // Nullable integer
+
+
+        public User? User { get; set; }
     }
 }

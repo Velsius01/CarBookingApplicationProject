@@ -2,7 +2,7 @@
 {
     public class User : BaseDomainModel
     {
-        public string? Name { get; set; }
+        public string? DisplayName { get; set; }
         public string? Email { get; set; }
         public string? PhoneNumber { get; set; }
         public string? DateOfBirth { get; set; }
@@ -13,6 +13,9 @@
         public string? DrivingExperience { get; set; }
         public string? FrequentLocations { get; set; }
         public string? PreferredPickupTime { get; set; }
-        public int RoleId { get; set; }
+        
+
+        public bool IsDriver { get; set; } // Indicates if the user is a driver
+        public bool IsPassenger { get; set; } // Indicates if the user is a passenger
     }
 }
