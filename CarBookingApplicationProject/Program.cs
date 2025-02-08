@@ -34,7 +34,7 @@ builder.Services.AddAuthentication(options =>
     .AddIdentityCookies();
 
 builder.Services.AddIdentityCore<CarBookingApplicationProjectUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<IdentityContext>()
+    .AddEntityFrameworkStores<CarBookingApplicationProjectContext>()
     .AddSignInManager()
     .AddDefaultTokenProviders();
 

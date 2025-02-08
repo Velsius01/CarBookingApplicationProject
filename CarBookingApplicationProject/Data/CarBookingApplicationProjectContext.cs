@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using CarBookingApplicationProject.Domain;
+using CarBookingApplicationProject.Data;
 using CarBookingApplicationProject.Configurations.Entities;
+using CarBookingApplicationProject.Domain;
+using Microsoft.AspNetCore.Identity;
 
 namespace CarBookingApplicationProject.Data
 {
-    public class CarBookingApplicationProjectContext : DbContext
+    public class CarBookingApplicationProjectContext(DbContextOptions<CarBookingApplicationProjectContext> options) : IdentityDbContext<CarBookingApplicationProjectUser>(options)
     {
-        public CarBookingApplicationProjectContext (DbContextOptions<CarBookingApplicationProjectContext> options)
-            : base(options)
-        {
-        }
         public DbSet<CarBookingApplicationProject.Domain.Feedback> Feedback { get; set; } = default!;
         public DbSet<CarBookingApplicationProject.Domain.Location> Location { get; set; } = default!;
         public DbSet<CarBookingApplicationProject.Domain.Payment> Payment { get; set; } = default!;
@@ -24,6 +19,13 @@ namespace CarBookingApplicationProject.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder); // Ensures Identity tables are set up correctly
+
+            // Explicitly define composite primary key for IdentityUserLogin<string>
+            modelBuilder.Entity<IdentityUserLogin<string>>()
+                .HasKey(l => new { l.LoginProvider, l.ProviderKey });
+
+
             // Decimal precision settings
 
             modelBuilder.Entity<Location>()
@@ -55,7 +57,11 @@ namespace CarBookingApplicationProject.Data
             modelBuilder.ApplyConfiguration(new RideSeed());
             modelBuilder.ApplyConfiguration(new UserProfileSeed());
             modelBuilder.ApplyConfiguration(new VehicleSeed());
-            
+
+
+
+
+
         }
         }
-}
+    }
