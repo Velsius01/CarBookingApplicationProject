@@ -1,6 +1,6 @@
 ﻿namespace CarBookingApplicationProject.Domain
 {
-    public class User : BaseDomainModel
+    public class UserProfile : BaseDomainModel
     {
         public string? DisplayName { get; set; }
         public string? Email { get; set; }
@@ -18,4 +18,6 @@
         public bool IsDriver { get; set; } // Indicates if the user is a driver
         public bool IsPassenger { get; set; } // Indicates if the user is a passenger
     }
+
+
 }

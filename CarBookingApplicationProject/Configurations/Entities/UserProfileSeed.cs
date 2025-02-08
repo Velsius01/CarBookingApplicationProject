@@ -4,12 +4,12 @@ using CarBookingApplicationProject.Domain;
 namespace CarBookingApplicationProject.Configurations.Entities
 {
    
-        public class UserProfileSeed : IEntityTypeConfiguration<User>
+        public class UserProfileSeed : IEntityTypeConfiguration<UserProfile>
         {
-            public void Configure(EntityTypeBuilder<User> builder)
+            public void Configure(EntityTypeBuilder<UserProfile> builder)
             {
                 builder.HasData(
-                    new User
+                    new UserProfile
                     {
                         Id = 1, // Unique ID
                         DisplayName = "Jordan",
@@ -31,7 +31,7 @@ namespace CarBookingApplicationProject.Configurations.Entities
                         CreatedBy = "System",
                         UpdatedBy = "System"
                     },
-                    new User
+                    new UserProfile
                     {
                         Id = 2, // Unique ID
                         DisplayName = "Jeff",
@@ -46,7 +46,7 @@ namespace CarBookingApplicationProject.Configurations.Entities
                         FrequentLocations = "Jurong West, Pioneer",
                         PreferredPickupTime = "Morning",
                         IsDriver = true,
-                        IsPassenger = true,
+                        IsPassenger = false,
                         
                         DateCreated = DateTime.Now,
                         DateUpdated = DateTime.Now,

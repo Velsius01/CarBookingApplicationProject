@@ -32,7 +32,7 @@
             </div>        
             <div class="mb-3">
                 <label for="year" class="form-label">Year:</label> 
-                <InputText id="year" @bind-Value="Vehicle.Year" class="form-control" /> 
+                <InputNumber id="year" @bind-Value="Vehicle.Year" class="form-control" /> 
                 <ValidationMessage For="() => Vehicle.Year" class="text-danger" /> 
             </div>        
             <div class="mb-3">
@@ -42,7 +42,7 @@
             </div>        
             <div class="mb-3">
                 <label for="maximumpassengers" class="form-label">MaximumPassengers:</label> 
-                <InputText id="maximumpassengers" @bind-Value="Vehicle.MaximumPassengers" class="form-control" /> 
+                <InputNumber id="maximumpassengers" @bind-Value="Vehicle.MaximumPassengers" class="form-control" /> 
                 <ValidationMessage For="() => Vehicle.MaximumPassengers" class="text-danger" /> 
             </div>        
             <div class="mb-3">

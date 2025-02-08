@@ -13,14 +13,14 @@ namespace CarBookingApplicationProject.Data
             : base(options)
         {
         }
-
         public DbSet<CarBookingApplicationProject.Domain.Feedback> Feedback { get; set; } = default!;
         public DbSet<CarBookingApplicationProject.Domain.Location> Location { get; set; } = default!;
         public DbSet<CarBookingApplicationProject.Domain.Payment> Payment { get; set; } = default!;
         public DbSet<CarBookingApplicationProject.Domain.Promotion> Promotion { get; set; } = default!;
         public DbSet<CarBookingApplicationProject.Domain.Ride> Ride { get; set; } = default!;
-        public DbSet<CarBookingApplicationProject.Domain.Role> Role { get; set; } = default!;
-        public DbSet<CarBookingApplicationProject.Domain.User> User { get; set; } = default!;
+        public DbSet<CarBookingApplicationProject.Domain.UserProfile> UserProfile { get; set; } = default!;
         public DbSet<CarBookingApplicationProject.Domain.Vehicle> Vehicle { get; set; } = default!;
+
+        
     }
 }

@@ -1,0 +1,52 @@
+﻿@page "/userprofiles"
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using CarBookingApplicationProject.Domain
+@using CarBookingApplicationProject.Data
+@implements IAsyncDisposable
+@inject IDbContextFactory<CarBookingApplicationProject.Data.CarBookingApplicationProjectContext> DbFactory
+
+<PageTitle>Index</PageTitle>
+
+<h1>Index</h1>
+
+<p>
+    <a href="userprofiles/create">Create New</a>
+</p>
+
+<QuickGrid Class="table" Items="context.UserProfile">
+    <PropertyColumn Property="userprofile => userprofile.DisplayName" />
+    <PropertyColumn Property="userprofile => userprofile.Email" />
+    <PropertyColumn Property="userprofile => userprofile.PhoneNumber" />
+    <PropertyColumn Property="userprofile => userprofile.DateOfBirth" />
+    <PropertyColumn Property="userprofile => userprofile.Gender" />
+    <PropertyColumn Property="userprofile => userprofile.Address" />
+    <PropertyColumn Property="userprofile => userprofile.CarLicense" />
+    <PropertyColumn Property="userprofile => userprofile.AcceptanceRate" />
+    <PropertyColumn Property="userprofile => userprofile.DrivingExperience" />
+    <PropertyColumn Property="userprofile => userprofile.FrequentLocations" />
+    <PropertyColumn Property="userprofile => userprofile.PreferredPickupTime" />
+    <PropertyColumn Property="userprofile => userprofile.IsDriver" />
+    <PropertyColumn Property="userprofile => userprofile.IsPassenger" />
+    <PropertyColumn Property="userprofile => userprofile.DateCreated" />
+    <PropertyColumn Property="userprofile => userprofile.DateUpdated" />
+    <PropertyColumn Property="userprofile => userprofile.CreatedBy" />
+    <PropertyColumn Property="userprofile => userprofile.UpdatedBy" />
+
+    <TemplateColumn Context="userprofile">
+        <a href="@($"userprofiles/edit?id={userprofile.Id}")">Edit</a> |
+        <a href="@($"userprofiles/details?id={userprofile.Id}")">Details</a> |
+        <a href="@($"userprofiles/delete?id={userprofile.Id}")">Delete</a>
+    </TemplateColumn>
+</QuickGrid>
+
+@code {
+    private CarBookingApplicationProjectContext context = default!;
+
+    protected override void OnInitialized()
+    {
+        context = DbFactory.CreateDbContext();
+    }
+
+    public async ValueTask DisposeAsync() => await context.DisposeAsync();
+}

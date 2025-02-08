@@ -1,0 +1,169 @@
+﻿@page "/userprofiles/edit"
+@using Microsoft.EntityFrameworkCore
+@using CarBookingApplicationProject.Domain
+@inject IDbContextFactory<CarBookingApplicationProject.Data.CarBookingApplicationProjectContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Edit</PageTitle>
+
+<h1>Edit</h1>
+
+<h2>UserProfile</h2>
+<hr />
+@if (UserProfile is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-4">
+            <EditForm method="post" Model="UserProfile" OnValidSubmit="UpdateUserProfile" FormName="edit" Enhance>
+                <DataAnnotationsValidator />
+                <ValidationSummary role="alert"/>
+                <input type="hidden" name="UserProfile.Id" value="@UserProfile.Id" />
+                <div class="mb-3">
+                    <label for="displayname" class="form-label">DisplayName:</label>
+                    <InputText id="displayname" @bind-Value="UserProfile.DisplayName" class="form-control" />
+                    <ValidationMessage For="() => UserProfile.DisplayName" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email:</label>
+                    <InputText id="email" @bind-Value="UserProfile.Email" class="form-control" />
+                    <ValidationMessage For="() => UserProfile.Email" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="phonenumber" class="form-label">PhoneNumber:</label>
+                    <InputText id="phonenumber" @bind-Value="UserProfile.PhoneNumber" class="form-control" />
+                    <ValidationMessage For="() => UserProfile.PhoneNumber" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="dateofbirth" class="form-label">DateOfBirth:</label>
+                    <InputText id="dateofbirth" @bind-Value="UserProfile.DateOfBirth" class="form-control" />
+                    <ValidationMessage For="() => UserProfile.DateOfBirth" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="gender" class="form-label">Gender:</label>
+                    <InputText id="gender" @bind-Value="UserProfile.Gender" class="form-control" />
+                    <ValidationMessage For="() => UserProfile.Gender" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="address" class="form-label">Address:</label>
+                    <InputText id="address" @bind-Value="UserProfile.Address" class="form-control" />
+                    <ValidationMessage For="() => UserProfile.Address" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="carlicense" class="form-label">CarLicense:</label>
+                    <InputText id="carlicense" @bind-Value="UserProfile.CarLicense" class="form-control" />
+                    <ValidationMessage For="() => UserProfile.CarLicense" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="acceptancerate" class="form-label">AcceptanceRate:</label>
+                    <InputText id="acceptancerate" @bind-Value="UserProfile.AcceptanceRate" class="form-control" />
+                    <ValidationMessage For="() => UserProfile.AcceptanceRate" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="drivingexperience" class="form-label">DrivingExperience:</label>
+                    <InputText id="drivingexperience" @bind-Value="UserProfile.DrivingExperience" class="form-control" />
+                    <ValidationMessage For="() => UserProfile.DrivingExperience" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="frequentlocations" class="form-label">FrequentLocations:</label>
+                    <InputText id="frequentlocations" @bind-Value="UserProfile.FrequentLocations" class="form-control" />
+                    <ValidationMessage For="() => UserProfile.FrequentLocations" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="preferredpickuptime" class="form-label">PreferredPickupTime:</label>
+                    <InputText id="preferredpickuptime" @bind-Value="UserProfile.PreferredPickupTime" class="form-control" />
+                    <ValidationMessage For="() => UserProfile.PreferredPickupTime" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="isdriver" class="form-label">IsDriver:</label>
+                    <InputCheckbox id="isdriver" @bind-Value="UserProfile.IsDriver" class="form-check-input" />
+                    <ValidationMessage For="() => UserProfile.IsDriver" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="ispassenger" class="form-label">IsPassenger:</label>
+                    <InputCheckbox id="ispassenger" @bind-Value="UserProfile.IsPassenger" class="form-check-input" />
+                    <ValidationMessage For="() => UserProfile.IsPassenger" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="datecreated" class="form-label">DateCreated:</label>
+                    <InputDate id="datecreated" @bind-Value="UserProfile.DateCreated" class="form-control" />
+                    <ValidationMessage For="() => UserProfile.DateCreated" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="dateupdated" class="form-label">DateUpdated:</label>
+                    <InputDate id="dateupdated" @bind-Value="UserProfile.DateUpdated" class="form-control" />
+                    <ValidationMessage For="() => UserProfile.DateUpdated" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="createdby" class="form-label">CreatedBy:</label>
+                    <InputText id="createdby" @bind-Value="UserProfile.CreatedBy" class="form-control" />
+                    <ValidationMessage For="() => UserProfile.CreatedBy" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="updatedby" class="form-label">UpdatedBy:</label>
+                    <InputText id="updatedby" @bind-Value="UserProfile.UpdatedBy" class="form-control" />
+                    <ValidationMessage For="() => UserProfile.UpdatedBy" class="text-danger" />
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+<div>
+    <a href="/userprofiles">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromQuery]
+    private int Id { get; set; }
+
+    [SupplyParameterFromForm]
+    private UserProfile? UserProfile { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        UserProfile ??= await context.UserProfile.FirstOrDefaultAsync(m => m.Id == Id);
+
+        if (UserProfile is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+
+    // To protect from overposting attacks, enable the specific properties you want to bind to.
+    // For more information, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task UpdateUserProfile()
+    {
+        using var context = DbFactory.CreateDbContext();
+        context.Attach(UserProfile!).State = EntityState.Modified;
+
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!UserProfileExists(UserProfile!.Id))
+            {
+                NavigationManager.NavigateTo("notfound");
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        NavigationManager.NavigateTo("/userprofiles");
+    }
+
+    private bool UserProfileExists(int id)
+    {
+        using var context = DbFactory.CreateDbContext();
+        return context.UserProfile.Any(e => e.Id == id);
+    }
+}

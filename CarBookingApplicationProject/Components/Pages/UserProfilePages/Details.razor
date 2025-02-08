@@ -1,0 +1,78 @@
+﻿@page "/userprofiles/details"
+@using Microsoft.EntityFrameworkCore
+@using CarBookingApplicationProject.Domain
+@inject IDbContextFactory<CarBookingApplicationProject.Data.CarBookingApplicationProjectContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Details</PageTitle>
+
+<h1>Details</h1>
+
+<div>
+    <h2>UserProfile</h2>
+    <hr />
+    @if (userprofile is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <dl class="row">
+            <dt class="col-sm-2">DisplayName</dt>
+            <dd class="col-sm-10">@userprofile.DisplayName</dd>
+            <dt class="col-sm-2">Email</dt>
+            <dd class="col-sm-10">@userprofile.Email</dd>
+            <dt class="col-sm-2">PhoneNumber</dt>
+            <dd class="col-sm-10">@userprofile.PhoneNumber</dd>
+            <dt class="col-sm-2">DateOfBirth</dt>
+            <dd class="col-sm-10">@userprofile.DateOfBirth</dd>
+            <dt class="col-sm-2">Gender</dt>
+            <dd class="col-sm-10">@userprofile.Gender</dd>
+            <dt class="col-sm-2">Address</dt>
+            <dd class="col-sm-10">@userprofile.Address</dd>
+            <dt class="col-sm-2">CarLicense</dt>
+            <dd class="col-sm-10">@userprofile.CarLicense</dd>
+            <dt class="col-sm-2">AcceptanceRate</dt>
+            <dd class="col-sm-10">@userprofile.AcceptanceRate</dd>
+            <dt class="col-sm-2">DrivingExperience</dt>
+            <dd class="col-sm-10">@userprofile.DrivingExperience</dd>
+            <dt class="col-sm-2">FrequentLocations</dt>
+            <dd class="col-sm-10">@userprofile.FrequentLocations</dd>
+            <dt class="col-sm-2">PreferredPickupTime</dt>
+            <dd class="col-sm-10">@userprofile.PreferredPickupTime</dd>
+            <dt class="col-sm-2">IsDriver</dt>
+            <dd class="col-sm-10">@userprofile.IsDriver</dd>
+            <dt class="col-sm-2">IsPassenger</dt>
+            <dd class="col-sm-10">@userprofile.IsPassenger</dd>
+            <dt class="col-sm-2">DateCreated</dt>
+            <dd class="col-sm-10">@userprofile.DateCreated</dd>
+            <dt class="col-sm-2">DateUpdated</dt>
+            <dd class="col-sm-10">@userprofile.DateUpdated</dd>
+            <dt class="col-sm-2">CreatedBy</dt>
+            <dd class="col-sm-10">@userprofile.CreatedBy</dd>
+            <dt class="col-sm-2">UpdatedBy</dt>
+            <dd class="col-sm-10">@userprofile.UpdatedBy</dd>
+        </dl>
+        <div>
+            <a href="@($"/userprofiles/edit?id={userprofile.Id}")">Edit</a> |
+            <a href="@($"/userprofiles")">Back to List</a>
+        </div>
+    }
+</div>
+
+@code {
+    private UserProfile? userprofile;
+
+    [SupplyParameterFromQuery]
+    private int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        userprofile = await context.UserProfile.FirstOrDefaultAsync(m => m.Id == Id);
+
+        if (userprofile is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+}

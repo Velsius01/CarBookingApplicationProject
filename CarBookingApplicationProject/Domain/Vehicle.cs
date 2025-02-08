@@ -11,6 +11,6 @@
         public int? UserId { get; set; } // Nullable integer
 
 
-        public User? User { get; set; }
+        
     }
 }
